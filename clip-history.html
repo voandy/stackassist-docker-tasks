@@ -1,0 +1,133 @@
+<html>
+    <head>
+        <title>Clip Google Chrome History</title>
+
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+            integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    </head>
+    <body class="bg-light">
+        <div class="container gy-5">
+            <div class="row">
+                <div class="col p-4">
+                    <h1 class="display-6">Clip Google Chrome History</h1>
+                    <div id="error" style="display:none" class="alert alert-danger"></div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="mb-3">
+                        <label class="form-label">Chrome History JSON</label>
+                        <input type="file" class="form-control" id="field-history-file" accept=".json" />
+                        <div class="form-text">Exported using Google Chrome history plugin</div>
+                    </div>
+                    <hr />
+                    <div class="mb-3">
+                        <label class="form-label">Start Date Time</label>
+                        <input type="text" class="form-control" id="field-start-date-time" />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">End Date Time</label>
+                        <input type="text" class="form-control" id="field-end-date-time" />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Task</label>
+                        <select class="form-select" id="field-task">
+                            <option value="docker_task_1">Docker Task 1</option>
+                            <option value="docker_task_2">Docker Task 2</option>
+                            <option value="docker_task_3">Docker Task 3</option>
+                            <option value="basics_task_1">Basics Task 1</option>
+                            <option value="basics_task_2">Basics Task 2</option>
+                            <option value="basics_task_3">Basics Task 3</option>
+                        </select>
+                    </div>
+                    <button type="button" class="btn btn-secondary">Apply</button>
+                    <button type="button" id="btn-download" class="btn btn-primary">Download</button>
+                </div>
+                <div class="col">
+                    <div class="mb-3">
+                        <label class="form-label">History Preview</label>
+                        <textarea class="form-control" id="field-preview" rows="30" readonly></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.0/FileSaver.min.js"></script>
+        <script>
+            const historyFileField = document.getElementById('field-history-file');
+            const startDateTimeField = document.getElementById('field-start-date-time');
+            const endDateTimeField = document.getElementById('field-end-date-time');
+            const taskField = document.getElementById('field-task');
+            const errorBox = document.getElementById('error');
+            const previewBox = document.getElementById('field-preview');
+            const downloadButton = document.getElementById('btn-download');
+
+            var chromeHistory = [];
+            var origChromeHistory = [];
+            const dateTimeFormat = 'DD/MM/YYYY, hh:mm:ss';
+            var excludedItems = {};
+
+            function renderPreview() {
+                previewBox.innerHTML = JSON.stringify(chromeHistory, null, 2);
+            }
+
+            function updateDateTimes() {
+                if (chromeHistory.length > 0) {
+                    startDateTimeField.value = moment(chromeHistory[chromeHistory.length - 1]['lastVisitTimeLocal'], dateTimeFormat).format()
+                    endDateTimeField.value = moment(chromeHistory[0]['lastVisitTimeLocal'], dateTimeFormat).format()
+                }
+            }
+
+            function changeDateTimes() {
+                var startDateTime = moment(startDateTimeField.value);
+                var endDateTime = moment(endDateTimeField.value);
+
+                chromeHistory = [];
+
+                for (var item of origChromeHistory) {
+                    var itemDateTime = moment(item['lastVisitTimeLocal'], dateTimeFormat);
+                    if (itemDateTime.isSameOrAfter(startDateTime) && itemDateTime.isSameOrBefore(endDateTime)) {
+                        chromeHistory.push(item)
+                    }
+                }
+
+                renderPreview();
+            }
+
+            function showError(message) {
+                errorBox.style.display = "block";
+                errorBox.innerHTML = message;
+            }
+
+            startDateTimeField.addEventListener('change', changeDateTimes);
+            endDateTimeField.addEventListener('change', changeDateTimes);
+
+            downloadButton.addEventListener('click', event => {
+                var blob = new Blob([JSON.stringify(chromeHistory, null, 2)], {
+                    type: "application/json;charset=utf-8"
+                });
+
+                saveAs(blob, "browsing_" + taskField.value + ".json");
+            });
+
+            historyFileField.addEventListener('change', event => {
+                if (event.target.files.length > 0) {
+                    const fileReader = new FileReader();
+
+                    fileReader.onload = () => {
+                        try {
+                            chromeHistory = JSON.parse(fileReader.result)
+                            origChromeHistory = chromeHistory;
+                        } catch {
+                            showError("Unable to parse JSON in file");
+                        }
+                        renderPreview();
+                        updateDateTimes();
+                    }
+
+                    fileReader.readAsText(event.target.files[0]);
+                }
+            });
+        </script>
+    </body>
+</html>

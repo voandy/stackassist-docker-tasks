@@ -21,8 +21,9 @@ Both groups have been provided the same 3 tasks and are to be executed in sequen
 Export your browsing history in Google Chrome using the newly added extension
 - Download your last 1hr or 6hr (as needed) of browsing history
 ![](images/download_history.gif)
-- Using VSCode, clip items of your browsing history from prior to starting the task
-![](images/clip_history.gif)
+- Open `clip-history.html` in your browser
+- Using the form provided, input the downloaded file and manually change the start and end time to suit the task execution time
+- Select the task which this history correlates to then download the file
 - Save each file as `browsing_docker_task_{task_num}.json`, these are to be submitted as part of the final survey
 
 
