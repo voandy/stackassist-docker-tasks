@@ -1,6 +1,6 @@
 # StackAssist Study - Docker Tasks
 ## Study Overview
-The intention of this study is to investigate the interactions of developer when retrieving programming information from the internet. The participants have been broken down into two groups. Upon recruitment into the study, you will have been assigned to one of these groups by the coordinator.
+The intention of this study is to investigate the interactions of developers when retrieving programming information from the internet. The participants have been broken down into two groups. Upon recruitment into the study, you will have been assigned to one of these groups by the coordinator.
 
 **SA (StackAssist)**:
 The SA group will have StackAssist installed on their !!VSCODE!! window. They are required to use StackAssist for every interaction when retrieving information. If they find that they are unable to extract relevant information from StackAssist, they can resort to the internet to complete the task.
