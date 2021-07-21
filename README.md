@@ -47,3 +47,5 @@ ShipHand is a startup company using [NodeJS](https://nodejs.dev/) to construct a
 
 Greg has simply built the applications on his local machine and hasn't deployed the application to any other device. The ShipHand committee would like to preview and test the applications Greg has built before they deploy them to a cloud platform. Predictably, Greg hasn't deployed an application before because he is only a high school student. As a result, ShipHand has tasked you with building these applications using [Docker](https://www.docker.com/) so each member of their presumably non-technical committee can run the project on their Macbooks.
 
+## Note
+- No NodeJS code is required to be modified to complete the tasks
