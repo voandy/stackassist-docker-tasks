@@ -1,0 +1,14 @@
+services:
+  backend:
+    build: .
+    image: backend
+    read_only: true
+    volumes:
+      - /tmp
+    ports:
+      - "80:8888"
+  client:
+    build: .
+    image: client
+    read_only: true
+    network_mode: "host"
