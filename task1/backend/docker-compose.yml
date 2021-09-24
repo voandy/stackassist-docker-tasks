@@ -2,6 +2,9 @@ services:
   backend:
     build: .
     image: backend
+    read_only: true
+    volumes:
+      - /tmp
     ports:
       - "8888:8888"
     expose:
